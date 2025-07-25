@@ -4,6 +4,7 @@ project(stella_vslam_examples LANGUAGES CXX C)
 # ----- Find dependencies -----
 
 find_package(stella_vslam REQUIRED)
+find_package(realsense2)
 
 # filesystem
 set(filesystem_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/3rd/filesystem/include)
@@ -68,6 +69,14 @@ list(APPEND EXECUTABLE_TARGETS run_tum_rgbd_slam)
 add_executable(run_loop_closure src/run_loop_closure.cc)
 list(APPEND EXECUTABLE_TARGETS run_loop_closure)
 
+if(realsense2_FOUND)
+    add_executable(run_realsense_d455_slam src/run_realsense_d455_slam.cc)
+    list(APPEND EXECUTABLE_TARGETS run_realsense_d455_slam)
+
+    add_executable(run_realsense_d455_stereo_slam src/run_realsense_d455_stereo_slam.cc)
+    list(APPEND EXECUTABLE_TARGETS run_realsense_d455_stereo_slam)
+endif()
+
 foreach(EXECUTABLE_TARGET IN LISTS EXECUTABLE_TARGETS)
     # Set output directory for executables
     set_target_properties(${EXECUTABLE_TARGET} PROPERTIES
@@ -115,6 +124,13 @@ foreach(EXECUTABLE_TARGET IN LISTS EXECUTABLE_TARGETS)
                           stella_vslam::stella_vslam
                           opencv_imgcodecs
                           opencv_videoio)
+    
+    # Link Realsense
+    if(realsense2_FOUND)
+        target_link_libraries(${EXECUTABLE_TARGET}
+                        PRIVATE
+                        ${realsense2_LIBRARY})
+    endif()
 
     # include 3rd party library headers
     target_include_directories(${EXECUTABLE_TARGET}
