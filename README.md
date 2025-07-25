@@ -1,4 +1,9 @@
-# stella_vslam_examples
+# stella_vslam for SlimeVR
+
+WORK IN PROGRESS (might never happen)
+
+## Build
+To build see build instructions for [stella_vslam](https://github.com/stella-cv/stella_vslam).
 
 ## License
 
